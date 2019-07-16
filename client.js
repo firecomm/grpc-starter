@@ -1,6 +1,8 @@
 const grpc = require("grpc");
 const routeguide = require("./routeguide");
-const { Duplex } = require("stream");
+const { Duplex, Readable, Writable } = require("stream");
+const path = require("path");
+const fs = require("fs");
 
 const stub = new routeguide.RouteGuide(
   "localhost:3000",
@@ -99,23 +101,37 @@ const byteStream = stub.streamVideo({ message: "hello" }, meta, {
 
 // console.log("stub", stub.__proto__);
 
-const body = "";
-
-const stream = new Duplex();
+const stream = new Readable({
+  read(binary) {
+    this.push();
+  }
+});
 
 // function bufferToStream(buffer) {
 //   stream.push(buffer);
 //   stream.push(null);
 // }
 
+let body = "";
+
 byteStream.on("data", data => {
-  console.log("data: ", data.chunk instanceof Buffer);
-  console.log("data: ", data.chunk);
-  stream.push(data.chunk);
+  console.log("data: ", Buffer.isBuffer(data.chunk));
+  const buf = new Buffer(data.chunk);
+  // console.log(buf.__proto__);
+  console.log(buf.toString());
+  // console.log(buf.isEncoding("utf8"));
+  // console.log("data: ", buf.isBuffer());
+  body += data.chunk;
+  // fs.appendFile(path.join(__dirname, "/big-clone.txt"), data.chunk, err =>
+  //   console.log(err)
+  // );
 });
 
 byteStream.on("end", () => {
   console.log("end:");
+  console.log(body);
+  fs.writeFileSync(path.join(__dirname, "/big-clone.txt"), body);
+  console.log("buffer methods", Object.keys(Buffer));
 });
 
 byteStream.on("error", e => {

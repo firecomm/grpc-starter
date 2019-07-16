@@ -14,7 +14,7 @@ function numberPlusFive({ number }) {
 
 function streamVideo(call) {
   console.log("call", call);
-  const stream = fs.createReadStream(path.join(__dirname, "./lumish.mp4"));
+  const stream = fs.createReadStream(path.join(__dirname, "./big.txt"));
   stream.on("data", chunk => {
     console.log(chunk);
     call.write(chunk);
@@ -23,7 +23,6 @@ function streamVideo(call) {
     call.end();
   });
 }
-
 // console.log(streamVideo());
 
 //EXAMPLE CALL OBJECT
