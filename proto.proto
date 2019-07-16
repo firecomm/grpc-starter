@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package routeguide;
+
+service RouteGuide {
+  rpc NumberToNumber(Number) returns (Number) {}
+  rpc StreamNumbers(Number) returns (stream Number) {}
+  rpc StreamVideo(Message) returns (stream Chunk) {}
+}
+
+// service RouteGuide2 {
+//   rpc NumberToNumber2(Number) returns (Number) {}
+// }
+
+message Chunk {
+  bytes chunk = 1;
+}
+
+message Message {
+  string message = 1; 
+}
+
+message Number { int32 number = 1; }
