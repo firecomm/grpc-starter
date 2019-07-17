@@ -1,13 +1,21 @@
 const routeguide = require('./routeguide');
 const grpc = require('grpc');
 
-const {numberToNumber} = require('./service-methods');
+// created methods at service-methods
+const {numberToNumber, readFile} = require('./service-methods'); // if you remove brackets you will get error
 
 function getServer() {
   var server = new grpc.Server();
+  
   server.addService(routeguide.RouteGuide.service, {
-    numberToNumber,
+    numberToNumber: numberToNumber,
+    readFile, readFile
   });
+    // routeguide.RouteGuide === 
+        // { RouteGuide:
+        //   { [Function: ServiceClient]
+        //     super_: [Function: Client],
+        //     service: { NumberToNumber: [Object] } },
   return server;
 };
 

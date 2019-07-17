@@ -3,11 +3,16 @@ syntax = "proto3";
 package routeguide;
 
 service RouteGuide {
-  rpc NumberToNumber(Number) returns (Number) {}
+  rpc NumberToNumber( Number ) returns ( Number ) {}
+  rpc ReadFile( Empty ) returns( stream fileReturn ) {}
 }
 
-// service RouteGuide2 {
-//   rpc NumberToNumber2(Number) returns (Number) {}
-// }
-
 message Number { int32 number = 1; }
+
+message Empty{ // we need to give input in service api calls. This means 'no input'
+}
+
+message fileReturn {
+  string path = 1;
+}
+
