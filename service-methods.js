@@ -53,22 +53,14 @@ function bidiNumbers(call) {
   call.on("data", function(data) {
     // console.log("data from client:", data);
     const { number } = data;
-    if (number === 0) {
-      call.end();
-    }
+
     call.write({ number: Math.ceil(number ** 1.01) });
 
-    /* For each note sent, respond with all previous notes that correspond to
-     * the same point */
-    // if (route_notes.hasOwnProperty(key)) {
-    //   _.each(route_notes[key], function(note) {
-    //     call.write(note);
-    //   });
-    // } else {
-    //   route_notes[key] = [];
-    // }
-    // // Then add the new note to the list
-    // route_notes[key].push(JSON.parse(JSON.stringify(note)));
+    call.on("cancelled", () => {
+      console.log("cancelled");
+      // call.write({});
+      call.end();
+    });
   });
   call.on("end", function() {
     // console.log("ending");

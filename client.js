@@ -99,14 +99,27 @@ let count = 1;
 bidi.write(ourNumber);
 console.time("label");
 
+let isCancelled = false;
 //set event listener for readable stream
 bidi.on("data", data => {
   // console.log("data from server:", data);
   const { number } = data;
-  count += 2;
-  bidi.write({ number: number });
+  console.log({ number });
+  if (!isCancelled) {
+    if (number > 100) {
+      bidi.cancel();
+      bidi.end();
+      isCancelled = true;
+    } else {
+      count += 2;
+      bidi.write({ number: number });
+    }
+  }
 });
-
+bidi.on("error", error => {
+  console.log({ error });
+  bidi.end();
+});
 bidi.on("end", () => {
   // console.log("end:", count);
   console.timeEnd("label");
