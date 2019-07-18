@@ -10,7 +10,7 @@ var protoLoader = require('@grpc/proto-loader');
 // Suggested options for similarity to existing grpc.load behavior
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
-  longs: String,
+  longs: Number,
   enums: String,
   defaults: true,
   oneofs: true

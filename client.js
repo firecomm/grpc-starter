@@ -17,16 +17,27 @@ const ourNumber = {
   number: 5
 };
 
-stub.numberToNumber(ourNumber, function(err, number) {
-  if (err) console.log(err);
-  // console.log(number, 'in client js');
-});
+// stub.numberToNumber(ourNumber, function(err, number) {
+//   if (err) console.log(err);
+//   // console.log(number, 'in client js');
+// });
 
 // stub.readFile();
 const test = stub.readFile();
+// console.log(test)
+
+let allBuffers= [];
 test.on('data', (result) => {
   ({path} = result);
-  console.log( result )
+  test.write({path: 'OK'}, () => {
+    console.log('OK wwas sent')
+  })
+  // console.log( result )
+  allBuffers.push(path);
+  console.log(allBuffers.join())
 });
+
+// let listener = new ListenerBuilder();
+// console.log(listener)
 
 

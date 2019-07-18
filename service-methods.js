@@ -16,15 +16,47 @@ function numberToNumber(call, callback) {
 
 
 function readFile(call) {
-  let filePath = path.join(__dirname + '/someText.txt')
+  let filePath = path.join(__dirname + '/Bear.mp4')
   // console.log(call)
-  let readFile = fs.readFileSync(filePath);
+  // let readFile = fs.readFileSync(filePath);
+  
+  let test = fs.createReadStream(filePath, {
+    flags: 'r',
+    // encoding: 'utf-8',
+    fd: null,
+    bufferSize: 1
+  });
+
+  test.on('data', (data) => {
+      console.log(data) 
+      call.write({path: data}); 
+      test.resume();
+    })
+    
+  test.on('end', () => {
+    call.end(); // ending the stream here
+  })
+  test.end; // only ends when all data was read
 
   // console.log(readFile) // sends buffer data
   // console.log(readFile.toString())
   // call.write( readFile.toString() )
-  call.write({path: readFile.toString()})
-  call.end()
+  // call.write({path: readFile})
+  // call.end();
+
+  // fs.readFile(filePath, (err, result) => {
+  //   if(err) console.log(err);
+  //   // result = result.toString()
+  //   // console.log(result)
+  //   console.log(call.getPeer(), ' <---- Get peer')
+  //   // console.log(call) // serverduplexstream
+  //   call.write({path: result}, () => {
+  //     console.log('OK')
+  //   })
+    
+  //   call.end()
+  // });  
+
 
   // return filePath
 }

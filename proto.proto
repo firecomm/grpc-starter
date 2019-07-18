@@ -4,7 +4,7 @@ package routeguide;
 
 service RouteGuide {
   rpc NumberToNumber( Number ) returns ( Number ) {}
-  rpc ReadFile( Empty ) returns( stream fileReturn ) {}
+  rpc ReadFile( stream fileReturn ) returns( stream fileReturnBytes ) {}
 }
 
 message Number { int32 number = 1; }
@@ -14,5 +14,9 @@ message Empty{ // we need to give input in service api calls. This means 'no inp
 
 message fileReturn {
   string path = 1;
+}
+
+message fileReturnBytes {
+  bytes path = 1;
 }
 
