@@ -48,45 +48,32 @@ const interceptorProvider = function(options, nextCall) {
 // const provider = grpc.InterceptorProvider(stub.numberToNumber.path);
 // console.log(provider)
 
-// console.log('path', stub.numberToNumber.path)
-
-// stub.numberToNumber.interceptors.push(interceptor);
-
 const ourNumber = {
-  number: 3
+  number: 5
 };
 
-// stub.numberToNumber(
-//   ourNumber,
-//   { interceptors: [interceptorProvider] },
-//   function(err, number) {
-//     if (err) console.log(err);
-//     console.log(number);
-//   }
-// );
+// stub.numberToNumber(ourNumber, function(err, number) {
+//   if (err) console.log(err);
+//   // console.log(number, 'in client js');
+// });
 
-// SERVER STREAMING
-const meta = new grpc.Metadata();
-meta.set("hello", "world");
+// stub.readFile();
+const test = stub.readFile();
+// console.log(test)
 
-const numberStream = stub.streamNumbers(ourNumber, meta, {
-  interceptors: [interceptorProvider]
+let allBuffers= [];
+test.on('data', (result) => {
+  ({path} = result);
+  test.write({path: 'OK'}, () => {
+    console.log('OK wwas sent')
+  })
+  // console.log( result )
+  allBuffers.push(path);
+  console.log(allBuffers.join())
+
 });
 
-// console.log("stub", stub.__proto__);
+// let listener = new ListenerBuilder();
+// console.log(listener)
 
-numberStream.on("data", data => {
-  console.log("data: ", data);
-});
 
-numberStream.on("end", () => {
-  console.log("end:");
-});
-
-numberStream.on("error", e => {
-  console.log("error: ", e);
-});
-
-numberStream.on("status", status => {
-  console.log("status:", status);
-});
