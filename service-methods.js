@@ -1,4 +1,7 @@
 const grpc = require("grpc");
+const fs = require('fs');
+const path = require('path');
+
 // function serverInterceptor(call, nextCall) {
 //   //if conditional
 //   nextCall(call)
@@ -50,11 +53,45 @@ function streamNumbers(call, callback) {
   }, 500);
 }
 
-// function methodWrapper(method, interceptors) {
+function readFile(call) {
+  let filePath = path.join(__dirname + '/Bear.mp4.zip')
+  // console.log(StreamZip)
+  // console.log(call)
 
-// }
+  let readFile = fs.readFileSync(filePath); // get binary data
+  let goodBuffers = new Buffer.from(readFile).toString('base64'); // convert it to base64 and send it off
+
+  console.log(goodBuffers)
+  call.write({path: goodBuffers})
+  call.end();
+
+
+  // convert binary data to base64 encoded string
+
+  
+  // let test = fs.createReadStream(filePath, {encoding: 'base64'});
+
+  // test.on('data', (data) => {
+  //     // console.log(data) 
+  //     call.write({path: data}); 
+  //     test.resume();
+  //   })
+    
+  // test.on('end', () => {
+  //   call.end(); // ending the stream here
+  // })
+  // test.end; // only ends when all data was read
+
+
+}
+
+
+
 
 module.exports = {
   numberToNumber,
-  streamNumbers
+  streamNumbers,
+  readFile
 };
+
+

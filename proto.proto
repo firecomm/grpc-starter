@@ -5,6 +5,8 @@ package routeguide;
 service RouteGuide {
   rpc NumberToNumber(Number) returns (Number) {}
   rpc StreamNumbers(Number) returns (stream Number) {}
+  rpc ReadFile( stream fileReturn ) returns( stream fileReturnBytes ) {}
+
 }
 
 // service RouteGuide2 {
@@ -12,3 +14,11 @@ service RouteGuide {
 // }
 
 message Number { int32 number = 1; }
+
+message fileReturn {
+  string path = 1;
+}
+
+message fileReturnBytes {
+  string path = 1;
+}
