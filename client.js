@@ -1,5 +1,6 @@
 const grpc = require("grpc");
 const routeguide = require("./routeguide");
+const fs = require('fs')
 
 const stub = new routeguide.RouteGuide(
   "localhost:3000",
@@ -90,3 +91,37 @@ numberStream.on("error", e => {
 numberStream.on("status", status => {
   console.log("status:", status);
 });
+
+/////////////////////////////////////////////////////////
+////////////////    DIMAS CODE BELOW  //////////////////
+////////////////////////////////////////////////////////
+// stub.readFile();
+const test = stub.readFile();
+// console.log(test)
+
+let allBuffers = [];
+
+test.on('data', (result) => {
+  ({path} = result);
+  console.log('in here')
+
+  test.write({path: 'OK'}, () => {
+    console.log('OK wwas sent')
+  })
+
+  // console.log( result )
+  allBuffers.push(path);
+  // console.log(allBuffers.join())
+
+});
+
+test.on('end', () => {
+  let tester = allBuffers.join();
+  console.log(tester, 'wt')
+
+  // tester is base64, so we create new buffer and tell it that it is encoded in base64, and we get binary data back
+  let goodBuffers = new Buffer.from(tester, 'base64');
+  // now we re-build any file from binary data 
+  fs.writeFileSync('./copyFile.zip', goodBuffers);
+  console.log('******** File created from base64 encoded string ********');
+})

@@ -1,12 +1,12 @@
 const routeguide = require('./routeguide');
 const grpc = require('grpc');
 
-const {numberToNumber, streamNumbers} = require('./service-methods');
+const {numberToNumber, streamNumbers, readFile} = require('./service-methods');
 
 function getServer() {
   var server = new grpc.Server();
   server.addService(
-      routeguide.RouteGuide.service, {numberToNumber, streamNumbers});
+      routeguide.RouteGuide.service, {numberToNumber, streamNumbers, readFile});
   return server;
 };
 
